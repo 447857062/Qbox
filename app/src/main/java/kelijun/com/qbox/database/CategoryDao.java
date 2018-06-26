@@ -2,6 +2,8 @@ package kelijun.com.qbox.database;
 
 import android.content.Context;
 
+import com.orhanobut.logger.Logger;
+
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.List;
@@ -75,14 +77,14 @@ public class CategoryDao {
 
     }
     //查询用户列表
-    public void queryCategoryList() {
+    public List<CategoryEntity> queryCategoryList() {
         //master -> session-> entityDao-> entityDaoInsert
-
         DaoMaster daoMaster = new DaoMaster(dbManager.getWriteableDatabase());
         DaoSession session = daoMaster.newSession();
         CategoryEntityDao categoryEntityDao = session.getCategoryEntityDao();
         QueryBuilder<CategoryEntity> queryBuilder = categoryEntityDao.queryBuilder();
         List<CategoryEntity> categoryEntityList = queryBuilder.orderAsc(CategoryEntityDao.Properties.Order).list();
-
+        Logger.i("queryCategoryList() return size=:"+categoryEntityList.size());
+        return categoryEntityList;
     }
 }
