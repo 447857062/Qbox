@@ -19,7 +19,6 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-
         android:theme="@style/AppTheme">
         <activity
             android:name=".module.start.SplashActivity"
@@ -34,11 +33,12 @@
         <activity
             android:name=".module.start.welcome.WelcomeActivity"
             android:screenOrientation="portrait" />
-        <!--启动模式-->
+        <!-- 启动模式 -->
         <activity
             android:name=".module.main.MainsActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+        <activity android:name=".module.news_category.CategoryActivity"></activity>
     </application>
 
 </manifest>

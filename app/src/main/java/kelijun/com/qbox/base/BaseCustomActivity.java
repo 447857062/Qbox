@@ -57,6 +57,7 @@ public abstract class BaseCustomActivity extends AppCompatActivity implements IB
         builder.show();
 
     }
+
     public void showRadioButtonDialog(String title, String[] strings, DialogInterface.OnClickListener onClickListener) {
         showRadioButtonDialog(title, null, strings, 0, onClickListener);
     }

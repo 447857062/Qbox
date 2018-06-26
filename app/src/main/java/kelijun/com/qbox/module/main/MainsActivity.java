@@ -1,5 +1,6 @@
 package kelijun.com.qbox.module.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
@@ -7,14 +8,18 @@ import android.widget.FrameLayout;
 
 import com.orhanobut.logger.Logger;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import kelijun.com.qbox.R;
 import kelijun.com.qbox.base.BaseCustomActivity;
-import kelijun.com.qbox.config.Const;
+import kelijun.com.qbox.model.entities.RefreshNewsFragmentEvent;
 import kelijun.com.qbox.module.me.MeFragment;
 import kelijun.com.qbox.module.news.NewsFragment;
-import kelijun.com.qbox.utils.SPUtils;
+import kelijun.com.qbox.module.news_category.CategoryActivity;
 import kelijun.com.qbox.utils.StateBarTranslucentUtils;
 import kelijun.com.qbox.widget.TabBar_Mains;
 
@@ -48,7 +53,10 @@ public class MainsActivity extends BaseCustomActivity {
         Logger.i("initContentView");
         setContentView(R.layout.activity_mains);
     }
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void OnRefreshNewsFragmentEvent(RefreshNewsFragmentEvent event) {
+        startActivityForResult(new Intent(MainsActivity.this, CategoryActivity.class), event.getMark_code());
+    }
     @OnClick({R.id.recommend_mains, R.id.cityfinder_mains, R.id.findtravel_mains, R.id.me_mains})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -75,13 +83,22 @@ public class MainsActivity extends BaseCustomActivity {
     public void initView(Bundle savedInstanceState) {
         sBaseFragmentManager = getFragmentmanager();
         String startPage = NEWS_FRAGMENT;
-        String s = (String) SPUtils.get(this, Const.OPENNEWS, "nomagic");
         if (savedInstanceState != null) {
             initByRestart(savedInstanceState);
         } else {
             switchToFragment(startPage);
             mCurrentIndex = startPage;
         }
+
+        //订阅事件
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 
     private void initByRestart(Bundle savedInstanceState) {
@@ -99,7 +116,7 @@ public class MainsActivity extends BaseCustomActivity {
     }
 
     private void switchToFragment(String index) {
-        // hideAllFragment();
+         hideAllFragment();
         switch (index) {
             case NEWS_FRAGMENT:
                 if (sRecommendMains.getVisibility() == View.VISIBLE) {

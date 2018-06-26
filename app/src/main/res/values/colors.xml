@@ -6,4 +6,5 @@
     <color name="divider">#BDBDBD</color>
     <color name="colorPrimaryText">#212121</color>
     <color name="secondary_text">#757575</color>
+    <color name="tip">#999c9c9c</color>
 </resources>
