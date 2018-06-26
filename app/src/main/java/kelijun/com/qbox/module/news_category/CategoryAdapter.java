@@ -79,7 +79,17 @@ public class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     public void onClick(View v) {
                         int position = myViewHolder.getAdapterPosition();
                         if (isEditMode) {
+                            RecyclerView recyclerView= (RecyclerView) parent;
 
+                            View targetView = recyclerView.getLayoutManager().findViewByPosition(mMyChannelItems.size() + COUNT_PRE_OTHER_HEADER);
+                            //如果目标view在屏幕内,或者不在屏幕内
+                            //在屏幕内需要手动添加一个动画
+                            if (recyclerView.indexOfChild(targetView) >= 0) {
+
+
+                            }else{
+                                moveMyToOther(myViewHolder);
+                            }
                         }else{
                             mChannelItemClickListener.onItemClick(v,position-COUNT_PRE_MY_HEADER);
                         }
@@ -142,6 +152,21 @@ public class CategoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 break;
         }
         return null;
+    }
+
+    private void moveMyToOther(MyViewHolder myViewHolder) {
+        int position = myViewHolder.getAdapterPosition();
+        int startPosition = position - COUNT_PRE_MY_HEADER;
+
+        if (startPosition > mMyChannelItems.size() - 1) {
+            return;
+        }
+        CategoryEntity categoryEntity = mMyChannelItems.get(startPosition);
+
+        mMyChannelItems.remove(categoryEntity);
+
+        mOtherChannelItems.add(0, categoryEntity);
+        notifyItemMoved(position, mMyChannelItems.size() + COUNT_PRE_OTHER_HEADER);
     }
 
     /**
