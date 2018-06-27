@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
+apply plugin: 'com.mob.sdk'
 android {
     compileSdkVersion 25
     buildToolsVersion "27.0.3"
@@ -10,6 +11,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -18,6 +21,37 @@ android {
         }
     }
 }
+MobSDK {
+    appKey "269462c626c20"
+    appSecret "a9e1cb07b3818be0223ed4e1f9ad3463"
+
+    ShareSDK {
+        //平台配置信息
+        devInfo {
+            SinaWeibo {
+                appKey "568898243"
+                appSecret "38a4f8204cc784f81f9f0daaf31e02e3"
+                callbackUri "http://www.sharesdk.cn"
+                shareByAppClient false
+            }
+            Wechat {
+                appId "wx4868b35061f87885"
+                appSecret "64020361b8ec4c99936c0e3999a9f249"
+            }
+            QQ {
+                appId "100371282"
+                appKey "aed9b0303e3ed1e27bae87c33761161d"
+            }
+            Facebook {
+                appKey "1412473428822331"
+                appSecret "a42f4f3f867dc947b9ed6020c2e93558"
+                callbackUri "https://mob.com"
+            }
+        }
+    }
+
+}
+
 greendao {
     schemaVersion 1  //版本
     daoPackage 'kelijun.com.qbox.greendao.db' // 一般为app包名+生成文件的文件夹名
@@ -28,6 +62,7 @@ allprojects {
         maven { url "https://jitpack.io" }
     }
 }
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -61,4 +96,6 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile project(':magicindicator')
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.8.0'
+    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.nineoldandroids:library:2.4.0'
 }

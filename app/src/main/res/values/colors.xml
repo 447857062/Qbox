@@ -7,4 +7,5 @@
     <color name="colorPrimaryText">#212121</color>
     <color name="secondary_text">#757575</color>
     <color name="tip">#999c9c9c</color>
+    <color name="bg_text_wechat_item">#88000000</color>
 </resources>

@@ -1,11 +1,14 @@
 package kelijun.com.qbox.network;
 
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import kelijun.com.qbox.network.api.AllCategoryApi;
+import kelijun.com.qbox.network.api.ConstellationApi;
+import kelijun.com.qbox.network.api.DayJokeApi;
 import kelijun.com.qbox.network.api.WechatApi;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
@@ -24,7 +27,8 @@ public class Network {
     public static final String MOB_ROOT_URL = "http://apicloud.mob.com/";
     private static AllCategoryApi mAllCategoryApi;
     private static WechatApi mWechatApi;
-
+    private static ConstellationApi sConstellationApi;
+    private static DayJokeApi sDayJokeApi;
 
     public static final long cacheSize = 1024 * 1024 * 20;
     public static String cacheDirectory= Environment.getExternalStorageDirectory()+"okhttpcaches";
@@ -70,5 +74,30 @@ public class Network {
             mWechatApi = retrofit.create(WechatApi.class);
         }
         return mWechatApi;
+    }
+    public static ConstellationApi getConstellationApi(){
+        if (sConstellationApi == null) {
+            Retrofit retrofit = new Retrofit.Builder()//build模式
+                    .client(okHttpClient)//client
+                    .baseUrl("http://web.juhe.cn:8080/")//url
+                    .addConverterFactory(gsonConverterFactory)
+                    .addCallAdapterFactory(rxJavaCallAdapterFactory)
+                    .build();
+            sConstellationApi = retrofit.create(ConstellationApi.class);
+        }
+        return sConstellationApi;
+    }
+    public static DayJokeApi getDayJokeApi() {
+        if (sDayJokeApi == null) {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .client(okHttpClient)
+                    .baseUrl("http://japi.juhe.cn/")
+                    .addConverterFactory(gsonConverterFactory)
+                    .addCallAdapterFactory(rxJavaCallAdapterFactory)
+                    .build();
+            sDayJokeApi = retrofit.create(DayJokeApi.class);
+        }
+        Log.e("oooooo","getDayJokeApi");
+        return sDayJokeApi;
     }
 }

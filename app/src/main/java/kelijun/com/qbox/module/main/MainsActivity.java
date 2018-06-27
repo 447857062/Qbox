@@ -17,9 +17,11 @@ import butterknife.OnClick;
 import kelijun.com.qbox.R;
 import kelijun.com.qbox.base.BaseCustomActivity;
 import kelijun.com.qbox.model.entities.RefreshNewsFragmentEvent;
+import kelijun.com.qbox.module.find.FindFragment;
 import kelijun.com.qbox.module.me.MeFragment;
 import kelijun.com.qbox.module.news.NewsFragment;
 import kelijun.com.qbox.module.news_category.CategoryActivity;
+import kelijun.com.qbox.module.wechat.WechatFragment;
 import kelijun.com.qbox.utils.StateBarTranslucentUtils;
 import kelijun.com.qbox.widget.TabBar_Mains;
 
@@ -42,8 +44,8 @@ public class MainsActivity extends BaseCustomActivity {
     private FragmentManager sBaseFragmentManager;
     public MeFragment mMeFragment;
     public NewsFragment mNewsFragment;
-    /*public WechatFragment mWechatFragment;
-    public FindFragment mFindFragment;*/
+    public WechatFragment mWechatFragment;
+  public FindFragment mFindFragment;
     private String mCurrentIndex;
     boolean isRestart = false;
 
@@ -109,8 +111,8 @@ public class MainsActivity extends BaseCustomActivity {
         Logger.e("恢复状态：" + mCurrentIndex);
         mMeFragment = (MeFragment) sBaseFragmentManager.findFragmentByTag(ME_FRAGMENT);
         mNewsFragment = (NewsFragment) sBaseFragmentManager.findFragmentByTag(NEWS_FRAGMENT);
-      /*  mWechatFragment = (WechatFragment) sBaseFragmentManager.findFragmentByTag(WECHAT_FRAGMENT);
-        mFindFragment = (FindFragment) sBaseFragmentManager.findFragmentByTag(FIND_FRAGMENT);*/
+      mWechatFragment = (WechatFragment) sBaseFragmentManager.findFragmentByTag(WECHAT_FRAGMENT);
+      mFindFragment = (FindFragment) sBaseFragmentManager.findFragmentByTag(FIND_FRAGMENT);
 
         switchToFragment(mCurrentIndex);
     }
@@ -125,10 +127,10 @@ public class MainsActivity extends BaseCustomActivity {
                 }
                 break;
             case WECHAT_FRAGMENT:
-                //  showWechatFragment();
+                showWechatFragment();
                 break;
             case FIND_FRAGMENT:
-                //  showFindFragment();
+               showFindFragment();
                 break;
             case ME_FRAGMENT:
                 showMeFragment();
@@ -139,7 +141,37 @@ public class MainsActivity extends BaseCustomActivity {
         }
         mCurrentIndex = index;
     }
+    private void showFindFragment() {
+        if (false == sFindtravelMains.isSelected()) {
+            sFindtravelMains.setSelected(true);
+        }
+        if (mFindFragment == null) {
+            mFindFragment = FindFragment.newInstance("", "");
+            addFragment(R.id.framelayout_mains, mFindFragment, FIND_FRAGMENT);
+        } else if (isRestart = true) {
+            isRestart = false;
+            getFragmentTransaction().show(mFindFragment).commit();
+        } else {
+            showFragment(mFindFragment);
+        }
 
+    }
+
+    private void showWechatFragment() {
+        if (false == sCityfinderMains.isSelected()) {
+            sCityfinderMains.setSelected(true);
+        }
+        if (mWechatFragment == null) {
+            mWechatFragment = mWechatFragment.newInstance("", "");
+            addFragment(R.id.framelayout_mains, mWechatFragment, WECHAT_FRAGMENT);
+        } else if (isRestart = true) {
+            isRestart = false;
+            getFragmentTransaction().show(mWechatFragment).commit();
+        } else {
+            showFragment(mWechatFragment);
+        }
+
+    }
     private void showNewsFragment() {
         if (false == sRecommendMains.isSelected()) {
             sRecommendMains.setSelected(true);
@@ -180,12 +212,12 @@ public class MainsActivity extends BaseCustomActivity {
         if (mNewsFragment != null) {
             hideFragment(mNewsFragment);
         }
-       /* if (mWechatFragment != null) {
+       if (mWechatFragment != null) {
             hideFragment(mWechatFragment);
         }
         if (mFindFragment != null) {
             hideFragment(mFindFragment);
-        }*/
+        }
         if (mMeFragment != null) {
             hideFragment(mMeFragment);
         }

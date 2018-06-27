@@ -54,7 +54,7 @@
                     android:paddingTop="2dp"
                     android:textColor="@color/colorPrimary"/>
 
-                <com.ocnyang.qbox.app.widget.custom.IconFontTextView
+                <kelijun.com.qbox.widget.custom.IconFontTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"

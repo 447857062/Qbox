@@ -1,5 +1,6 @@
 package kelijun.com.qbox.module.news;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -21,6 +22,7 @@ import kelijun.com.qbox.base.BaseFragment;
 import kelijun.com.qbox.config.Const;
 import kelijun.com.qbox.model.entities.NewsItem;
 import kelijun.com.qbox.model.entities.WechatItem;
+import kelijun.com.qbox.module.NewsDetailsActivity.NewsDetailsActivity;
 import kelijun.com.qbox.network.Network;
 import kelijun.com.qbox.utils.PixelUtil;
 import kelijun.com.qbox.utils.SPUtils;
@@ -177,13 +179,13 @@ public class DefaultStyleFragment extends BaseFragment implements SwipeRefreshLa
             @Override
             public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
                 List<WechatItem.ResultBean.ListBean> data = adapter.getData();
-                //TODO
-              /*  Bundle bundle = new Bundle();
+
+                Bundle bundle = new Bundle();
                 bundle.putString("url", data.get(position).getSourceUrl());
                 bundle.putString("title", data.get(position).getTitle());
                 Intent intent = new Intent(getContext(), NewsDetailsActivity.class);
                 intent.putExtras(bundle);
-                startActivity(intent);*/
+                startActivity(intent);
             }
         });
         mNewsList.setAdapter(baseQuickAdapter);

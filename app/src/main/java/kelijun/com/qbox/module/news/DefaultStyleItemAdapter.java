@@ -42,7 +42,7 @@ public class DefaultStyleItemAdapter extends BaseQuickAdapter<WechatItem.ResultB
     @Override
     protected void convert(BaseViewHolder helper, WechatItem.ResultBean.ListBean item) {
             helper.setText(R.id.title_news_item,item.getTitle())
-                    .setText(R.id.from_news_item,"柯礼军")
+                    .setText(R.id.from_news_item,mContext.getString(R.string.app_name))
                     .setText(R.id.time_news_item,onFromatTime(item.getPubTime()));
         if (!isNotLoad) {
             Glide.with(mContext)
