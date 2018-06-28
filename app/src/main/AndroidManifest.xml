@@ -53,7 +53,8 @@
             android:screenOrientation="portrait" />
         <activity android:name=".module.news_category.CategoryActivity" />
         <activity android:name=".module.NewsDetailsActivity.NewsDetailsActivity" />
-        <activity android:name=".module.wechat.WeChatDetailsActivity"></activity>
+        <activity android:name=".module.wechat.WeChatDetailsActivity" />
+        <activity android:name=".module.find.joke.JokeActivity"></activity>
     </application>
 
 </manifest>

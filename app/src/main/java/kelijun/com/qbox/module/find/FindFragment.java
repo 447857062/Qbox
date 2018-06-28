@@ -1,5 +1,6 @@
 package kelijun.com.qbox.module.find;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
@@ -30,11 +32,16 @@ import kelijun.com.qbox.R;
 import kelijun.com.qbox.base.BaseFragment;
 import kelijun.com.qbox.config.Const;
 import kelijun.com.qbox.database.FunctionDao;
+import kelijun.com.qbox.model.entities.ChinaCalendar;
 import kelijun.com.qbox.model.entities.Constellation;
 import kelijun.com.qbox.model.entities.DayJoke;
+import kelijun.com.qbox.model.entities.FindBg;
 import kelijun.com.qbox.model.entities.FunctionBean;
 import kelijun.com.qbox.model.entities.RefreshFindFragmentEvent;
+import kelijun.com.qbox.module.find.joke.JokeActivity;
 import kelijun.com.qbox.network.Network;
+import kelijun.com.qbox.utils.DateUtils;
+import kelijun.com.qbox.utils.PixelUtil;
 import kelijun.com.qbox.utils.SPUtils;
 import rx.Observer;
 import rx.Subscription;
@@ -99,8 +106,13 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
     public ItemDragAndSwipeCallback mItemDragAndSwipeCallback;
     public ItemTouchHelper mItemTouchHelper;
 
+    private int mBgFlag;
+    public List<FindBg.ImagesBean> mImages;
+
     public Subscription mConstellationSubscription;
     public Subscription mDayJokeSubscribe;
+    public Subscription mBgSubscription;
+    public Subscription mChinaCalendarSubscription;
 
     public FindFragment() {
     }
@@ -113,12 +125,71 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
         fragment.setArguments(args);
         return fragment;
     }
+    private void requestBg() {
+        unsubscribe("bg");
+        mBgSubscription = Network.getFindBgApi()
+                .getFindBg("js", 0, 8)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(mFindBgObserver);
+    }
+    Observer<FindBg> mFindBgObserver = new Observer<FindBg>() {
 
+        @Override
+        public void onCompleted() {
+
+        }
+
+        @Override
+        public void onError(Throwable e) {
+
+        }
+
+        @Override
+        public void onNext(FindBg findBg) {
+            if (findBg != null) {
+                mImages = findBg.getImages();
+            }
+            setBg(mBgFlag);
+        }
+    };
+    private void setBg(int bgFlag) {
+        if (bgFlag <= 0) {
+            mBeforeFind.setEnabled(false);
+            if (bgFlag == 0)
+                showBg(mImages.get(0));
+        } else if (bgFlag >= mImages.size() - 1) {
+            mNextFind.setEnabled(false);
+            if (bgFlag == mImages.size() - 1)
+                showBg(mImages.get(mImages.size() - 1));
+        } else {
+            showBg(mImages.get(bgFlag));
+            if (!mBeforeFind.isEnabled())
+                mBeforeFind.setEnabled(true);
+            if (!mNextFind.isEnabled())
+                mNextFind.setEnabled(true);
+        }
+    }
+    public String mNowBgName;
+    public String mNowBgUrl;
+    public static final String BG_BASE_URL = "http://www.bing.com";
+    private void showBg(FindBg.ImagesBean imagesBean) {
+        mNowBgUrl = BG_BASE_URL + imagesBean.getUrl();
+        Glide.with(getContext())
+                .load(mNowBgUrl)
+                .override(PixelUtil.getWindowWidth(),PixelUtil.getWindowHeight())
+                .placeholder(R.color.colorPrimaryDark)
+                .error(R.color.colorPrimaryDark)
+                .into(mBgFind);
+        mNowBgName = imagesBean.getCopyright();
+        mBgTitleFind.setText(mNowBgName);
+
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.joke_find:
-                // startActivity(new Intent(getContext(), JokeActivity.class));
+                 startActivity(new Intent(getContext(), JokeActivity.class));
                 break;
             case R.id.star_find:
                 //  startActivity(new Intent(getContext(), ConstellationActivity.class));
@@ -139,10 +210,45 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void initView() {
         EventBus.getDefault().register(this);
-
+        mBgFlag = 0;
+        initBg();
+        initBottomContext();
         initRecycleView();
     }
+    private void initBg() {
+        mBeforeFind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mImages != null)
+                    setBg(--mBgFlag);
+            }
+        });
+        mNextFind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mImages != null)
+                    setBg(++mBgFlag);
+            }
+        });
+        mBgTitleFind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!TextUtils.isEmpty(mNowBgUrl)) {
+                   /* Intent intent = new Intent(getContext(), PinImageActivity.class);
+                    intent.putExtra(PinImageActivity.IMG_NAME,TextUtils.isEmpty(mNowBgName)?"":mNowBgName);
+                    intent.putExtra(PinImageActivity.IMG_URL,mNowBgUrl);
 
+                    ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            getActivity(),
+                            mBgFind,
+                            getString(R.string.transition_pinchimageview)
+                    );
+                    ActivityCompat.startActivity((Activity) getContext(),intent,optionsCompat.toBundle());*/
+                }
+            }
+        });
+        requestBg();
+    }
     private void initRecycleView() {
 
         mFindList = initData();
@@ -313,13 +419,56 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
         if (wannianliIsOpen) {
             mWannianliFind.setVisibility(View.VISIBLE);
             mWannianliFind.setOnClickListener(this);
-            //  requestWannianli();
+            requestWannianli();
         } else {
             mWannianliFind.setVisibility(View.GONE);
         }
 
     }
 
+    private void requestWannianli() {
+        String mDate = new StringBuffer()
+                .append(DateUtils.getCurrYear()).append("-")
+                .append(DateUtils.getCurrMonth()).append("-")
+                .append(DateUtils.getCurrDay()).toString();
+        unsubscribe("chinacalendar");
+        mChinaCalendarSubscription = Network.getChinaCalendarApi()
+                .getChinaCalendar("3f95b5d789fbc83f5d2f6d2479850e7e", mDate)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(mObserver);
+    }
+
+    Observer<ChinaCalendar> mObserver = new Observer<ChinaCalendar>() {
+
+        @Override
+        public void onCompleted() {
+
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Logger.e("onError:" + e.getMessage());
+        }
+
+        @Override
+        public void onNext(ChinaCalendar chinaCalendar) {
+            if (chinaCalendar.getError_code() == 0) {
+                initDateView(chinaCalendar.getResult().getData());
+            }else {
+                mYunshiStarFind.setText("请求数据失败");
+            }
+        }
+    };
+    private void initDateView(ChinaCalendar.ResultBean.DataBean data) {
+        mJieriCalendar.setText(data.getHoliday()+"");
+        mNongliCalendar.setText("农历"+data.getLunar());
+        mYearCalendar.setText(data.getYearmonth()+"");
+        mDayClendar.setText(data.getDate().split("-")[2]+"");
+        mYearsCalendar.setText(data.getAnimalsYear()+"."+data.getLunarYear());
+        mWeekCalendar.setText(data.getWeekday()+"");
+        mYiCalendar.setText(data.getSuit()+"");
+        mJiCalendar.setText(data.getAvoid()+"");
+    }
     private void requestJokeData() {
         unsubscribe("joke");
         mDayJokeSubscribe = Network.getDayJokeApi()
@@ -407,9 +556,14 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
     private void unsubscribe(String string) {
         switch (string) {
             case "bg":
+                if (mBgSubscription != null && !mBgSubscription.isUnsubscribed()) {
+                    mBgSubscription.unsubscribe();
+                }
                 break;
             case "joke":
-
+                if (mDayJokeSubscribe != null && !mDayJokeSubscribe.isUnsubscribed()) {
+                    mDayJokeSubscribe.unsubscribe();
+                }
                 break;
             case "star":
                 if (mConstellationSubscription != null && !mConstellationSubscription.isUnsubscribed()) {
@@ -417,6 +571,9 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
                 }
                 break;
             case "chinacalendar":
+                if (mChinaCalendarSubscription != null && mChinaCalendarSubscription.isUnsubscribed()) {
+                    mChinaCalendarSubscription.unsubscribe();
+                }
                 break;
             default:
                 break;

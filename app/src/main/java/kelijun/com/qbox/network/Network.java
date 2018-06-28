@@ -7,8 +7,10 @@ import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import kelijun.com.qbox.network.api.AllCategoryApi;
+import kelijun.com.qbox.network.api.ChinaCalendarApi;
 import kelijun.com.qbox.network.api.ConstellationApi;
 import kelijun.com.qbox.network.api.DayJokeApi;
+import kelijun.com.qbox.network.api.FindBgApi;
 import kelijun.com.qbox.network.api.WechatApi;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
@@ -29,6 +31,10 @@ public class Network {
     private static WechatApi mWechatApi;
     private static ConstellationApi sConstellationApi;
     private static DayJokeApi sDayJokeApi;
+    public static ChinaCalendarApi sChinaCalendarApi;
+    private static FindBgApi sFindBgApi;
+
+
 
     public static final long cacheSize = 1024 * 1024 * 20;
     public static String cacheDirectory= Environment.getExternalStorageDirectory()+"okhttpcaches";
@@ -62,6 +68,19 @@ public class Network {
             mAllCategoryApi = retrofit.create(AllCategoryApi.class);
         }
         return mAllCategoryApi;
+    }
+    public static FindBgApi getFindBgApi() {
+        if (sFindBgApi == null) {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .client(okHttpClient)
+                    .baseUrl("http://www.bing.com/")
+                    .addConverterFactory(gsonConverterFactory)
+                    .addCallAdapterFactory(rxJavaCallAdapterFactory)
+                    .build();
+            sFindBgApi = retrofit.create(FindBgApi.class);
+        }
+        Log.e("oooooo","getFindBgApi");
+        return sFindBgApi;
     }
     public static WechatApi getWecheatApi() {
         if (mWechatApi == null) {
@@ -99,5 +118,17 @@ public class Network {
         }
         Log.e("oooooo","getDayJokeApi");
         return sDayJokeApi;
+    }
+    public static ChinaCalendarApi getChinaCalendarApi(){
+        if (sChinaCalendarApi == null) {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .client(okHttpClient)
+                    .baseUrl("http://v.juhe.cn/")
+                    .addConverterFactory(gsonConverterFactory)
+                    .addCallAdapterFactory(rxJavaCallAdapterFactory)
+                    .build();
+            sChinaCalendarApi = retrofit.create(ChinaCalendarApi.class);
+        }
+        return sChinaCalendarApi;
     }
 }
