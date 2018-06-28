@@ -11,6 +11,7 @@ import kelijun.com.qbox.network.api.ChinaCalendarApi;
 import kelijun.com.qbox.network.api.ConstellationApi;
 import kelijun.com.qbox.network.api.DayJokeApi;
 import kelijun.com.qbox.network.api.FindBgApi;
+import kelijun.com.qbox.network.api.TextJokeApi;
 import kelijun.com.qbox.network.api.WechatApi;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
@@ -33,8 +34,8 @@ public class Network {
     private static DayJokeApi sDayJokeApi;
     public static ChinaCalendarApi sChinaCalendarApi;
     private static FindBgApi sFindBgApi;
-
-
+    private static TextJokeApi sTextJokeApi;
+    private static TextJokeApi sRandomTextJokeApi;
 
     public static final long cacheSize = 1024 * 1024 * 20;
     public static String cacheDirectory= Environment.getExternalStorageDirectory()+"okhttpcaches";
@@ -105,6 +106,32 @@ public class Network {
             sConstellationApi = retrofit.create(ConstellationApi.class);
         }
         return sConstellationApi;
+    }
+    public static TextJokeApi getNewTextJokeApi(){
+        if (sTextJokeApi == null) {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .client(okHttpClient)
+                    .baseUrl("http://japi.juhe.cn/")
+                    .addConverterFactory(gsonConverterFactory)
+                    .addCallAdapterFactory(rxJavaCallAdapterFactory)
+                    .build();
+            sTextJokeApi = retrofit.create(TextJokeApi.class);
+        }
+        return sTextJokeApi;
+
+    }
+    public static TextJokeApi getRandomTextJokeApi(){
+        if (sRandomTextJokeApi == null) {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .client(okHttpClient)
+                    .baseUrl("http://v.juhe.cn/")
+                    .addConverterFactory(gsonConverterFactory)
+                    .addCallAdapterFactory(rxJavaCallAdapterFactory)
+                    .build();
+            sRandomTextJokeApi = retrofit.create(TextJokeApi.class);
+        }
+        return sRandomTextJokeApi;
+
     }
     public static DayJokeApi getDayJokeApi() {
         if (sDayJokeApi == null) {

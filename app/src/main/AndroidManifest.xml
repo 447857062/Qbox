@@ -54,7 +54,11 @@
         <activity android:name=".module.news_category.CategoryActivity" />
         <activity android:name=".module.NewsDetailsActivity.NewsDetailsActivity" />
         <activity android:name=".module.wechat.WeChatDetailsActivity" />
-        <activity android:name=".module.find.joke.JokeActivity"></activity>
+        <activity android:name=".module.find.joke.JokeActivity" />
+        <activity android:name=".module.pinchimage.PinImageActivity" />
+        <activity android:name=".Html5Activity" />
+        <activity android:name=".module.find.FindMoreActivity" />
+        <activity android:name=".module.find.QueryInfoActivity"></activity>
     </application>
 
 </manifest>

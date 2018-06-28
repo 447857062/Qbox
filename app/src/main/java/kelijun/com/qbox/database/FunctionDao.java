@@ -2,6 +2,8 @@ package kelijun.com.qbox.database;
 
 import android.content.Context;
 
+import com.orhanobut.logger.Logger;
+
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.ArrayList;
@@ -41,6 +43,7 @@ public class FunctionDao {
      * @param users
      */
     public void insertFunctionList(List<FunctionBean> users) {
+        Logger.i("插入用户集合");
         if (users == null || users.isEmpty()) {
             return;
         }
@@ -116,6 +119,9 @@ public class FunctionDao {
         QueryBuilder<FunctionBean> qb = userDao.queryBuilder();
         List<FunctionBean> list = qb.where(FunctionBeanDao.Properties.Mark.eq(1))
                 .orderAsc(FunctionBeanDao.Properties.Id).list();
+        for (int i = 0; i < list.size(); i++) {
+            Logger.i("功能名称:"+list.get(i).getName());
+        }
         return list;
     }
     /**

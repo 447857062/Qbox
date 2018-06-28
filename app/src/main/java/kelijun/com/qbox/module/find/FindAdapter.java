@@ -4,6 +4,7 @@ import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseItemDraggableAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
@@ -28,9 +29,9 @@ public class FindAdapter extends BaseItemDraggableAdapter<FunctionBean,BaseViewH
     protected void convert(BaseViewHolder helper, FunctionBean item) {
         helper.setText(R.id.name_item_find, item.getName());
         ImageView imageView = helper.getView(R.id.icon_item_find);
-
         try {
             int camera = (int) R.drawable.class.getField(item.getCode()).get(null);
+            Logger.i("camera="+camera);
             imageView.setImageResource(camera);
 
         } catch (IllegalAccessException e) {

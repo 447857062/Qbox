@@ -3,6 +3,7 @@ package kelijun.com.qbox.model.entities;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Unique;
 
 /**
  * Created by ${kelijun} on 2018/6/25.
@@ -14,6 +15,7 @@ public class FunctionBean {
 
     private int id;
     private int mark;
+    @Unique
     private String name;
     private String code;
     private boolean notOpen;

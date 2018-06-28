@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.flaviofaria.kenburnsview.KenBurnsView;
+import com.orhanobut.logger.Logger;
 
 import kelijun.com.qbox.R;
 import kelijun.com.qbox.config.Const;
@@ -40,11 +41,13 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         mPresenter = new SplashPresenterImpl(this);
 
         // 判断是否是第一次开启应用
-        boolean isFirstOpen = (boolean) SPUtils.get(this, Const.FIRST_OPEN, false);
+        boolean isFirstOpen = (boolean) SPUtils.get(this, Const.FIRST_OPEN, true);
+        Logger.i("isFirstOpen="+isFirstOpen);
         mPresenter.isFirstOpen(isFirstOpen);
     }
 
@@ -59,12 +62,6 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
     public void startWelcomeGuideActivity() {
         WelcomeActivity.start(this);
         finish();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        SplashActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
     @OnShowRationale({Manifest.permission.READ_CONTACTS,
@@ -130,6 +127,13 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
     void showNeverAskForCamera() {
         Toast.makeText(this, "不再询问授权权限！", Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Logger.i("onRequestPermissionsResult");
+        SplashActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
     //=======================动态权限的申请===========================================================>
 
     @Override
@@ -176,8 +180,6 @@ public class SplashActivity extends AppCompatActivity implements SplashView {
         mPresenter.onDestroy();
         super.onDestroy();
     }
-
-
     Animation anim;
 
     /**

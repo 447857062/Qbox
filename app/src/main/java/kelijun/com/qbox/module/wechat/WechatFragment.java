@@ -48,12 +48,14 @@ public class WechatFragment extends BaseFragment implements BaseSectionQuickAdap
     public boolean mRefreshMark;
     private String mParam1;
     private String mParam2;
+
     @BindView(R.id.recycler_wechat)
     RecyclerView mRecyclerWechat;
     @BindView(R.id.swiper_wechat)
     SwipeRefreshLayout mSwiperWechat;
     @BindView(R.id.floatingactionbutton_wechat)
     FloatingActionButton mFloatingActionButton;
+
     private WechatItemAdapter mWechatItemAdapter;
     private List<WechatItem.ResultBean.ListBean> mListBeanList;
 
@@ -104,7 +106,7 @@ public class WechatFragment extends BaseFragment implements BaseSectionQuickAdap
     private void requestData() {
         unsubscribe();
         mSubscription = Network.getWecheatApi()
-                .getWechat("8", mPageMark, mPs).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe();
+                .getWechat("8", mPageMark, mPs).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(mObserver);
     }
 
     Observer<WechatItem> mObserver = new Observer<WechatItem>() {

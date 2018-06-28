@@ -35,7 +35,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
     private Subscription mSubscription;
 
     public static void start(Context context) {
-        SPUtils.put(context, Const.FIRST_OPEN, true);
+        SPUtils.put(context, Const.FIRST_OPEN, false);
         context.startActivity(new Intent(context, WelcomeActivity.class));
     }
 
@@ -46,11 +46,9 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         //设置状态栏透明
         StateBarTranslucentUtils.setStateBarTranslucent(this);
         findViewById(R.id.bRetry).setOnClickListener(this);
-
         if (savedInstanceState == null) {
             replaceTutorialFragment();
         }
-
         requestCategory();
         saveFunctionToDB();
     }
@@ -123,10 +121,11 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void saveFunctionToDB() {
+        Logger.i("saveFunctionToDB");
         Function function = null;
-
         try {
             function = new Gson().fromJson(StreamUtils.get(getApplicationContext(), R.raw.function), Function.class);
+
         } catch (JsonSyntaxException e) {
             Logger.e("读取raw中的function.json文件异常：" + e.getMessage());
             e.printStackTrace();

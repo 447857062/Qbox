@@ -1,8 +1,11 @@
 package kelijun.com.qbox.module.find;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -28,6 +31,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 
 import butterknife.BindView;
+import kelijun.com.qbox.Html5Activity;
 import kelijun.com.qbox.R;
 import kelijun.com.qbox.base.BaseFragment;
 import kelijun.com.qbox.config.Const;
@@ -39,6 +43,7 @@ import kelijun.com.qbox.model.entities.FindBg;
 import kelijun.com.qbox.model.entities.FunctionBean;
 import kelijun.com.qbox.model.entities.RefreshFindFragmentEvent;
 import kelijun.com.qbox.module.find.joke.JokeActivity;
+import kelijun.com.qbox.module.pinchimage.PinImageActivity;
 import kelijun.com.qbox.network.Network;
 import kelijun.com.qbox.utils.DateUtils;
 import kelijun.com.qbox.utils.PixelUtil;
@@ -234,7 +239,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 if (!TextUtils.isEmpty(mNowBgUrl)) {
-                   /* Intent intent = new Intent(getContext(), PinImageActivity.class);
+                    Intent intent = new Intent(getContext(), PinImageActivity.class);
                     intent.putExtra(PinImageActivity.IMG_NAME,TextUtils.isEmpty(mNowBgName)?"":mNowBgName);
                     intent.putExtra(PinImageActivity.IMG_URL,mNowBgUrl);
 
@@ -243,7 +248,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
                             mBgFind,
                             getString(R.string.transition_pinchimageview)
                     );
-                    ActivityCompat.startActivity((Activity) getContext(),intent,optionsCompat.toBundle());*/
+                    ActivityCompat.startActivity((Activity) getContext(),intent,optionsCompat.toBundle());
                 }
             }
         });
@@ -252,12 +257,12 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
     private void initRecycleView() {
 
         mFindList = initData();
+        Logger.i(String.valueOf(mFindList.size()));
         mFindAdapter = new FindAdapter(mFindList);
         mRecyclerFind.setLayoutManager(new GridLayoutManager(getContext(), 3));
         mItemDragAndSwipeCallback = new ItemDragAndSwipeCallback(mFindAdapter);
         mItemTouchHelper = new ItemTouchHelper(mItemDragAndSwipeCallback);
         mItemTouchHelper.attachToRecyclerView(mRecyclerFind);
-
         mFindAdapter.enableDragItem(mItemTouchHelper);
         mFindAdapter.setOnItemDragListener(new OnItemDragListener() {
             @Override
@@ -300,11 +305,11 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
                 //   startActivity(new Intent(getContext(), ChinaCalendarActivity.class));
                 break;
             case "快递查询":
-              /*  Intent intent = new Intent(getContext(), Html5Activity.class);
+               Intent intent = new Intent(getContext(), Html5Activity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("url","https://m.kuaidi100.com/");
                 intent.putExtra("bundle",bundle);
-                startActivity(intent);*/
+                startActivity(intent);
                 break;
             case "黄金数据":
                 notOpen();
@@ -313,12 +318,12 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
                 notOpen();
                 break;
             case "更多":
-                //   startActivity(new Intent(getContext(), FindMoreActivity.class));
+               startActivity(new Intent(getContext(), FindMoreActivity.class));
                 break;
             case "身份证查询":
-              /*  Intent intent_idcard = new Intent(getContext(), QueryInfoActivity.class);
+               Intent intent_idcard = new Intent(getContext(), QueryInfoActivity.class);
                 intent_idcard.putExtra(QueryInfoActivity.QUERY_STYLE,QueryInfoActivity.QUERY_IDCARD);
-                startActivity(intent_idcard);*/
+                startActivity(intent_idcard);
                 break;
             case "邮编查询":
                 notOpen();

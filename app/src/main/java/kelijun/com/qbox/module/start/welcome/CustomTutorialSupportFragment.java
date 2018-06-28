@@ -36,9 +36,8 @@ public class CustomTutorialSupportFragment extends TutorialSupportFragment
     private final View.OnClickListener mOnSkipClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-//            Toast.makeText(getContext(), "Skip button clicked", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(getActivity(), SplashActivity.class));
-            SPUtils.put(getActivity(), Const.FIRST_OPEN, true);
+            SPUtils.put(getActivity(), Const.FIRST_OPEN, false);
             getActivity().finish();
         }
     };

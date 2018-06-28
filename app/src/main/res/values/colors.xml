@@ -8,4 +8,8 @@
     <color name="secondary_text">#757575</color>
     <color name="tip">#999c9c9c</color>
     <color name="bg_text_wechat_item">#88000000</color>
+    <color name="bg_viewpager_title">#cc303F9F</color>
+    <color name="colorBackGround">#FBF7ED</color>
+    <color name="colorPrimaryLight">#C5CAE9</color>
+    <color name="white_ccffffff">#77ffffff</color>
 </resources>

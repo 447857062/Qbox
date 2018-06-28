@@ -48,7 +48,7 @@ public class FunctionBeanDao extends AbstractDao<FunctionBean, Long> {
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: functionId
                 "\"ID\" INTEGER NOT NULL ," + // 1: id
                 "\"MARK\" INTEGER NOT NULL ," + // 2: mark
-                "\"NAME\" TEXT," + // 3: name
+                "\"NAME\" TEXT UNIQUE ," + // 3: name
                 "\"CODE\" TEXT," + // 4: code
                 "\"NOT_OPEN\" INTEGER NOT NULL );"); // 5: notOpen
     }
