@@ -11,6 +11,7 @@ import kelijun.com.qbox.network.api.ChinaCalendarApi;
 import kelijun.com.qbox.network.api.ConstellationApi;
 import kelijun.com.qbox.network.api.DayJokeApi;
 import kelijun.com.qbox.network.api.FindBgApi;
+import kelijun.com.qbox.network.api.QueryInfoApi;
 import kelijun.com.qbox.network.api.TextJokeApi;
 import kelijun.com.qbox.network.api.WechatApi;
 import okhttp3.Cache;
@@ -36,6 +37,10 @@ public class Network {
     private static FindBgApi sFindBgApi;
     private static TextJokeApi sTextJokeApi;
     private static TextJokeApi sRandomTextJokeApi;
+
+    private static QueryInfoApi sQueryTelApi;
+    private static QueryInfoApi sQueryQQApi;
+    private static QueryInfoApi sQueryIDCardApi;
 
     public static final long cacheSize = 1024 * 1024 * 20;
     public static String cacheDirectory= Environment.getExternalStorageDirectory()+"okhttpcaches";
@@ -157,5 +162,41 @@ public class Network {
             sChinaCalendarApi = retrofit.create(ChinaCalendarApi.class);
         }
         return sChinaCalendarApi;
+    }
+    public static QueryInfoApi getQueryIDCardApi(){
+        if (sQueryIDCardApi == null) {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .client(okHttpClient)
+                    .baseUrl("http://apis.juhe.cn/")
+                    .addConverterFactory(gsonConverterFactory)
+                    .addCallAdapterFactory(rxJavaCallAdapterFactory)
+                    .build();
+            sQueryIDCardApi = retrofit.create(QueryInfoApi.class);
+        }
+        return sQueryIDCardApi;
+    }
+    public static QueryInfoApi getQueryQQApi(){
+        if (sQueryQQApi == null) {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .client(okHttpClient)
+                    .baseUrl("http://japi.juhe.cn/")
+                    .addConverterFactory(gsonConverterFactory)
+                    .addCallAdapterFactory(rxJavaCallAdapterFactory)
+                    .build();
+            sQueryQQApi = retrofit.create(QueryInfoApi.class);
+        }
+        return sQueryQQApi;
+    }
+    public static QueryInfoApi getQueryTelApi(){
+        if (sQueryTelApi == null) {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .client(okHttpClient)
+                    .baseUrl("http://apis.juhe.cn/")
+                    .addConverterFactory(gsonConverterFactory)
+                    .addCallAdapterFactory(rxJavaCallAdapterFactory)
+                    .build();
+            sQueryTelApi = retrofit.create(QueryInfoApi.class);
+        }
+        return sQueryTelApi;
     }
 }

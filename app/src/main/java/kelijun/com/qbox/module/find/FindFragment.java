@@ -42,6 +42,7 @@ import kelijun.com.qbox.model.entities.DayJoke;
 import kelijun.com.qbox.model.entities.FindBg;
 import kelijun.com.qbox.model.entities.FunctionBean;
 import kelijun.com.qbox.model.entities.RefreshFindFragmentEvent;
+import kelijun.com.qbox.module.find.chinacalendar.ChinaCalendarActivity;
 import kelijun.com.qbox.module.find.joke.JokeActivity;
 import kelijun.com.qbox.module.pinchimage.PinImageActivity;
 import kelijun.com.qbox.network.Network;
@@ -60,8 +61,6 @@ import rx.schedulers.Schedulers;
 public class FindFragment extends BaseFragment implements View.OnClickListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private String mParam1;
-    private String mParam2;
 
     @BindView(R.id.bg_find_find)
     KenBurnsView mBgFind;
@@ -130,6 +129,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
         fragment.setArguments(args);
         return fragment;
     }
+
     private void requestBg() {
         unsubscribe("bg");
         mBgSubscription = Network.getFindBgApi()
@@ -138,6 +138,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mFindBgObserver);
     }
+
     Observer<FindBg> mFindBgObserver = new Observer<FindBg>() {
 
         @Override
@@ -158,6 +159,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
             setBg(mBgFlag);
         }
     };
+
     private void setBg(int bgFlag) {
         if (bgFlag <= 0) {
             mBeforeFind.setEnabled(false);
@@ -175,14 +177,16 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
                 mNextFind.setEnabled(true);
         }
     }
+
     public String mNowBgName;
     public String mNowBgUrl;
     public static final String BG_BASE_URL = "http://www.bing.com";
+
     private void showBg(FindBg.ImagesBean imagesBean) {
         mNowBgUrl = BG_BASE_URL + imagesBean.getUrl();
         Glide.with(getContext())
                 .load(mNowBgUrl)
-                .override(PixelUtil.getWindowWidth(),PixelUtil.getWindowHeight())
+                .override(PixelUtil.getWindowWidth(), PixelUtil.getWindowHeight())
                 .placeholder(R.color.colorPrimaryDark)
                 .error(R.color.colorPrimaryDark)
                 .into(mBgFind);
@@ -190,17 +194,18 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
         mBgTitleFind.setText(mNowBgName);
 
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.joke_find:
-                 startActivity(new Intent(getContext(), JokeActivity.class));
+                startActivity(new Intent(getContext(), JokeActivity.class));
                 break;
             case R.id.star_find:
                 //  startActivity(new Intent(getContext(), ConstellationActivity.class));
                 break;
             case R.id.wannianli_find:
-                // startActivity(new Intent(getContext(), ChinaCalendarActivity.class));
+                startActivity(new Intent(getContext(), ChinaCalendarActivity.class));
                 break;
             default:
                 break;
@@ -220,6 +225,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
         initBottomContext();
         initRecycleView();
     }
+
     private void initBg() {
         mBeforeFind.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -240,20 +246,21 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
             public void onClick(View v) {
                 if (!TextUtils.isEmpty(mNowBgUrl)) {
                     Intent intent = new Intent(getContext(), PinImageActivity.class);
-                    intent.putExtra(PinImageActivity.IMG_NAME,TextUtils.isEmpty(mNowBgName)?"":mNowBgName);
-                    intent.putExtra(PinImageActivity.IMG_URL,mNowBgUrl);
+                    intent.putExtra(PinImageActivity.IMG_NAME, TextUtils.isEmpty(mNowBgName) ? "" : mNowBgName);
+                    intent.putExtra(PinImageActivity.IMG_URL, mNowBgUrl);
 
                     ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
                             getActivity(),
                             mBgFind,
                             getString(R.string.transition_pinchimageview)
                     );
-                    ActivityCompat.startActivity((Activity) getContext(),intent,optionsCompat.toBundle());
+                    ActivityCompat.startActivity((Activity) getContext(), intent, optionsCompat.toBundle());
                 }
             }
         });
         requestBg();
     }
+
     private void initRecycleView() {
 
         mFindList = initData();
@@ -302,13 +309,13 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
     private void itemActionEvent(String name) {
         switch (name) {
             case "万年历":
-                //   startActivity(new Intent(getContext(), ChinaCalendarActivity.class));
+                startActivity(new Intent(getContext(), ChinaCalendarActivity.class));
                 break;
             case "快递查询":
-               Intent intent = new Intent(getContext(), Html5Activity.class);
+                Intent intent = new Intent(getContext(), Html5Activity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("url","https://m.kuaidi100.com/");
-                intent.putExtra("bundle",bundle);
+                bundle.putString("url", "https://m.kuaidi100.com/");
+                intent.putExtra("bundle", bundle);
                 startActivity(intent);
                 break;
             case "黄金数据":
@@ -318,25 +325,25 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
                 notOpen();
                 break;
             case "更多":
-               startActivity(new Intent(getContext(), FindMoreActivity.class));
+                startActivity(new Intent(getContext(), FindMoreActivity.class));
                 break;
             case "身份证查询":
-               Intent intent_idcard = new Intent(getContext(), QueryInfoActivity.class);
-                intent_idcard.putExtra(QueryInfoActivity.QUERY_STYLE,QueryInfoActivity.QUERY_IDCARD);
+                Intent intent_idcard = new Intent(getContext(), QueryInfoActivity.class);
+                intent_idcard.putExtra(QueryInfoActivity.QUERY_STYLE, QueryInfoActivity.QUERY_IDCARD);
                 startActivity(intent_idcard);
                 break;
             case "邮编查询":
                 notOpen();
                 break;
             case "手机归属地":
-               /* Intent intent_tel = new Intent(getContext(), QueryInfoActivity.class);
-                intent_tel.putExtra(QueryInfoActivity.QUERY_STYLE,QueryInfoActivity.QUERY_TEL);
-                startActivity(intent_tel);*/
+                Intent intent_tel = new Intent(getContext(), QueryInfoActivity.class);
+                intent_tel.putExtra(QueryInfoActivity.QUERY_STYLE, QueryInfoActivity.QUERY_TEL);
+                startActivity(intent_tel);
                 break;
             case "QQ吉凶":
-               /* Intent intent_qq = new Intent(getContext(), QueryInfoActivity.class);
-                intent_qq.putExtra(QueryInfoActivity.QUERY_STYLE,QueryInfoActivity.QUERY_QQ);
-                startActivity(intent_qq);*/
+                Intent intent_qq = new Intent(getContext(), QueryInfoActivity.class);
+                intent_qq.putExtra(QueryInfoActivity.QUERY_STYLE, QueryInfoActivity.QUERY_QQ);
+                startActivity(intent_qq);
                 break;
             case "星座运势":
                 //  startActivity(new Intent(getContext(), ConstellationActivity.class));
@@ -348,7 +355,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
                 notOpen();
                 break;
             case "笑话大全":
-                // startActivity(new Intent(getContext(), JokeActivity.class));
+                startActivity(new Intent(getContext(), JokeActivity.class));
                 break;
             default:
                 break;
@@ -366,8 +373,6 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     protected void managerArguments() {
-        mParam1 = getArguments().getString(ARG_PARAM1);
-        mParam2 = getArguments().getString(ARG_PARAM2);
     }
 
     @Override
@@ -459,21 +464,23 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
         public void onNext(ChinaCalendar chinaCalendar) {
             if (chinaCalendar.getError_code() == 0) {
                 initDateView(chinaCalendar.getResult().getData());
-            }else {
+            } else {
                 mYunshiStarFind.setText("请求数据失败");
             }
         }
     };
+
     private void initDateView(ChinaCalendar.ResultBean.DataBean data) {
-        mJieriCalendar.setText(data.getHoliday()+"");
-        mNongliCalendar.setText("农历"+data.getLunar());
-        mYearCalendar.setText(data.getYearmonth()+"");
-        mDayClendar.setText(data.getDate().split("-")[2]+"");
-        mYearsCalendar.setText(data.getAnimalsYear()+"."+data.getLunarYear());
-        mWeekCalendar.setText(data.getWeekday()+"");
-        mYiCalendar.setText(data.getSuit()+"");
-        mJiCalendar.setText(data.getAvoid()+"");
+        mJieriCalendar.setText(data.getHoliday() + "");
+        mNongliCalendar.setText("农历" + data.getLunar());
+        mYearCalendar.setText(data.getYearmonth() + "");
+        mDayClendar.setText(data.getDate().split("-")[2] + "");
+        mYearsCalendar.setText(data.getAnimalsYear() + "." + data.getLunarYear());
+        mWeekCalendar.setText(data.getWeekday() + "");
+        mYiCalendar.setText(data.getSuit() + "");
+        mJiCalendar.setText(data.getAvoid() + "");
     }
+
     private void requestJokeData() {
         unsubscribe("joke");
         mDayJokeSubscribe = Network.getDayJokeApi()

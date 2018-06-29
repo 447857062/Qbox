@@ -58,7 +58,10 @@
         <activity android:name=".module.pinchimage.PinImageActivity" />
         <activity android:name=".Html5Activity" />
         <activity android:name=".module.find.FindMoreActivity" />
-        <activity android:name=".module.find.QueryInfoActivity"></activity>
+        <activity android:name=".module.find.QueryInfoActivity" />
+        <activity android:name=".module.find.chinacalendar.ChinaCalendarActivity" />
+        <activity android:name=".module.me.UserInfoActivity" />
+        <activity android:name=".module.me.AddressActivity"></activity>
     </application>
 
 </manifest>

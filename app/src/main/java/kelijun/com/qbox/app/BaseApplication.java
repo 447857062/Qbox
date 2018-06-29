@@ -17,6 +17,8 @@ import kelijun.com.qbox.greendao.db.DaoSession;
  */
 
 public class BaseApplication extends Application {
+    public static final boolean DEBUG = false;
+    public static final boolean USE_SAMPLE_DATA = false;
     private static BaseApplication mInstance;
     public static Context getInstance() {
         return mInstance;
