@@ -61,7 +61,9 @@
         <activity android:name=".module.find.QueryInfoActivity" />
         <activity android:name=".module.find.chinacalendar.ChinaCalendarActivity" />
         <activity android:name=".module.me.UserInfoActivity" />
-        <activity android:name=".module.me.AddressActivity"></activity>
+        <activity android:name=".module.me.AddressActivity" />
+        <activity android:name=".module.me.CalendarActivity" />
+        <activity android:name=".module.me.weather.weather.WeatherActivity"></activity>
     </application>
 
 </manifest>

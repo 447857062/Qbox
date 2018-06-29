@@ -26,6 +26,7 @@ import kelijun.com.qbox.R;
 import kelijun.com.qbox.base.BaseFragment;
 import kelijun.com.qbox.config.Const;
 import kelijun.com.qbox.model.entities.RefreshMeFragmentEvent;
+import kelijun.com.qbox.module.me.weather.weather.WeatherActivity;
 import kelijun.com.qbox.utils.SPUtils;
 
 /**
@@ -55,6 +56,7 @@ public class MeFragment extends BaseFragment {
     LinearLayout mSettingMe;
     @BindView(R.id.fab)
     FloatingActionButton mFab;
+
     public MeFragment() {
     }
 
@@ -62,6 +64,7 @@ public class MeFragment extends BaseFragment {
         MeFragment fragment = new MeFragment();
         return fragment;
     }
+
     @Override
     public int getLayoutRes() {
         return R.layout.fragment_me_new;
@@ -85,6 +88,7 @@ public class MeFragment extends BaseFragment {
             initUserInfo();
         }
     }
+
     private void initUserInfo() {
         String username = (String) SPUtils.get(getContext(), Const.USER_NAME, "");
         String userhader = (String) SPUtils.get(getContext(), Const.USER_HEADER, "");
@@ -99,31 +103,33 @@ public class MeFragment extends BaseFragment {
             mMottoMe.setText(usergeyan);
         }
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
     @OnClick({R.id.rili_me, R.id.tianqi_me, R.id.led_me, R.id.sdt_me, R.id.erweima_me, R.id.setting_me, R.id.fab})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.rili_me:
-               // startActivity(new Intent(getContext(),CalendarActivity.class));
+                startActivity(new Intent(getContext(), CalendarActivity.class));
                 break;
             case R.id.tianqi_me:
-              //  startActivity(new Intent(getContext(), WeatherActivity.class));
+                startActivity(new Intent(getContext(), WeatherActivity.class));
                 break;
             case R.id.led_me:
-              //  startActivity(new Intent(getContext(),LEDActivity.class));
+                //  startActivity(new Intent(getContext(),LEDActivity.class));
                 break;
             case R.id.sdt_me:
-             //   startActivity(new Intent(getContext(),FlashActivity.class));
+                //   startActivity(new Intent(getContext(),FlashActivity.class));
                 break;
             case R.id.erweima_me:
-             //   startActivity(new Intent(getContext(),ZxingActivity.class));
+                //   startActivity(new Intent(getContext(),ZxingActivity.class));
                 break;
             case R.id.setting_me:
-               // startActivity(new Intent(getContext(), SettingActivity.class));
+                // startActivity(new Intent(getContext(), SettingActivity.class));
                 break;
             case R.id.fab:
                 Intent intent = new Intent(getContext(), UserInfoActivity.class);
@@ -133,7 +139,7 @@ public class MeFragment extends BaseFragment {
                         getString(R.string.transition_userhead)
                 );
 
-                ActivityCompat.startActivity((Activity) getContext(),intent,optionsCompat.toBundle());
+                ActivityCompat.startActivity((Activity) getContext(), intent, optionsCompat.toBundle());
                 break;
         }
     }

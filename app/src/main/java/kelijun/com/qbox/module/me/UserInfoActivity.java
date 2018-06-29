@@ -3,9 +3,12 @@ package kelijun.com.qbox.module.me;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PersistableBundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +30,7 @@ import com.jph.takephoto.compress.CompressConfig;
 import com.jph.takephoto.model.CropOptions;
 import com.jph.takephoto.model.InvokeParam;
 import com.jph.takephoto.model.LubanOptions;
+import com.jph.takephoto.model.TContextWrap;
 import com.jph.takephoto.model.TResult;
 import com.jph.takephoto.model.TakePhotoOptions;
 import com.jph.takephoto.permission.InvokeListener;
@@ -54,6 +58,7 @@ import kelijun.com.qbox.module.me.weather.weather.api.ApiManager;
 import kelijun.com.qbox.utils.SPUtils;
 
 import static kelijun.com.qbox.module.me.weather.weather.api.ApiManager.KEY_SELECTED_AREA;
+
 public class UserInfoActivity extends BaseCommonActivity implements Toolbar.OnMenuItemClickListener, TakePhoto.TakeResultListener, InvokeListener {
     @BindView(R.id.toolbar_userinfo)
     Toolbar mToolbarUserinfo;
@@ -95,6 +100,7 @@ public class UserInfoActivity extends BaseCommonActivity implements Toolbar.OnMe
             super.handleMessage(msg);
         }
     };
+
     /**
      * 获取星座列表的选择项
      *
@@ -105,6 +111,7 @@ public class UserInfoActivity extends BaseCommonActivity implements Toolbar.OnMe
         String[] stringArray = getResources().getStringArray(R.array.arrays_constellation);
         return stringArray[(int) selectedItemId];
     }
+
     /**
      * 保存按钮的 点击事件
      *
@@ -149,9 +156,9 @@ public class UserInfoActivity extends BaseCommonActivity implements Toolbar.OnMe
                  * prov : 直辖市
                  */
                 if (cityBean != null) {
-                    Logger.e("地点："+cityBean.toString());
+                    Logger.e("地点：" + cityBean.toString());
 
-                    List<ApiManager.Area> areas  = new ArrayList<>();
+                    List<ApiManager.Area> areas = new ArrayList<>();
                     String s = (String) SPUtils.get(this, KEY_SELECTED_AREA, "");
 
                     Logger.e("取出的地点：+s");
@@ -175,7 +182,7 @@ public class UserInfoActivity extends BaseCommonActivity implements Toolbar.OnMe
                                 break;
                             }
                         }
-                    }else {
+                    } else {
                         ApiManager.Area e = new ApiManager.Area();
                         e.setCity(cityBean.getCity());
                         e.setProvince(cityBean.getProv());
@@ -184,7 +191,7 @@ public class UserInfoActivity extends BaseCommonActivity implements Toolbar.OnMe
                         areas.add(e);
                     }
 
-                    SPUtils.put(this,KEY_SELECTED_AREA,new Gson().toJson(areas));
+                    SPUtils.put(this, KEY_SELECTED_AREA, new Gson().toJson(areas));
 
                     SPUtils.put(this, Const.USER_ADDRESS_CITY, cityBean.getCity());
                     SPUtils.put(this, Const.USER_ADDRESS_CNTY, cityBean.getCnty());
@@ -192,7 +199,6 @@ public class UserInfoActivity extends BaseCommonActivity implements Toolbar.OnMe
                     SPUtils.put(this, Const.USER_ADDRESS_LAT, cityBean.getLat());
                     SPUtils.put(this, Const.USER_ADDRESS_LON, cityBean.getLon());
                     SPUtils.put(this, Const.USER_ADDRESS_PROV, cityBean.getProv());
-
 
 
                 }
@@ -230,6 +236,7 @@ public class UserInfoActivity extends BaseCommonActivity implements Toolbar.OnMe
 
         builder.create().show();
     }
+
     /**
      * 配置 裁剪选项
      *
@@ -247,6 +254,7 @@ public class UserInfoActivity extends BaseCommonActivity implements Toolbar.OnMe
         builder.setWithOwnCrop(false);
         return builder.create();
     }
+
     /**
      * 获取TakePhoto实例
      *
@@ -258,6 +266,7 @@ public class UserInfoActivity extends BaseCommonActivity implements Toolbar.OnMe
         }
         return takePhoto;
     }
+
     /**
      * 配置 压缩选项
      *
@@ -291,6 +300,7 @@ public class UserInfoActivity extends BaseCommonActivity implements Toolbar.OnMe
         }
         takePhoto.onEnableCompress(config, showProgressBar);
     }
+
     /**
      * 拍照相关的配置
      *
@@ -308,6 +318,7 @@ public class UserInfoActivity extends BaseCommonActivity implements Toolbar.OnMe
         }
         takePhoto.setTakePhotoOptions(builder.create());
     }
+
     private void takeOrPickPhoto(boolean isTakePhoto) {
         File file = new File(Environment.getExternalStorageDirectory(), "/temp/" + System.currentTimeMillis() + ".jpg");
         if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
@@ -351,6 +362,7 @@ public class UserInfoActivity extends BaseCommonActivity implements Toolbar.OnMe
             }
         }
     }
+
     @OnClick({R.id.userheader_userinfo, R.id.user_address_userinfo})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -439,6 +451,39 @@ public class UserInfoActivity extends BaseCommonActivity implements Toolbar.OnMe
             }
         });
     }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        getTakePhoto().onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        getTakePhoto().onSaveInstanceState(outState);
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Const.REQUEST_CODE_ADDRESS && resultCode == Const.RESULTES_CODE_ADDRESS) {
+            //添加地点
+            cityBean = (City.HeWeather5Bean.BasicBean) data.getParcelableExtra("data");
+            Logger.e(cityBean.getProv() + "-" + cityBean.getCity());
+            mUserAddressUserinfo.setText(cityBean.getProv() + "-" + cityBean.getCity());
+
+        } else {
+            //添加头像
+            getTakePhoto().onActivityResult(requestCode, resultCode, data);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        //以下代码为处理Android6.0、7.0动态权限所需
+        PermissionManager.TPermissionType type = PermissionManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionManager.handlePermissionsResult(this, type, invokeParam, this);
+    }
 
     private void initToolbar() {
         mToolbarUserinfo.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
@@ -456,9 +501,17 @@ public class UserInfoActivity extends BaseCommonActivity implements Toolbar.OnMe
     public void initPresenter() {
 
     }
+
     @Override
     public void takeSuccess(TResult result) {
+        File file = new File(result.getImages().get(0).getCompressPath());
+        mHeaderAbsolutePath = file.getAbsolutePath();
 
+        //需要返回到UI线程 刷新头像
+        Message msg = mHandler.obtainMessage();
+        msg.what = mMessageFlag;
+        msg.obj = file;
+        mHandler.sendMessage(msg);
     }
 
     @Override
@@ -473,6 +526,10 @@ public class UserInfoActivity extends BaseCommonActivity implements Toolbar.OnMe
 
     @Override
     public PermissionManager.TPermissionType invoke(InvokeParam invokeParam) {
-        return null;
+        PermissionManager.TPermissionType type = PermissionManager.checkPermission(TContextWrap.of(this), invokeParam.getMethod());
+        if (PermissionManager.TPermissionType.WAIT.equals(type)) {
+            this.invokeParam = invokeParam;
+        }
+        return type;
     }
 }
