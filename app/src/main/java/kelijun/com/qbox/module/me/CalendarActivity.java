@@ -179,7 +179,7 @@ public class CalendarActivity extends BaseCommonActivity implements OnDateSelect
         View view = LayoutInflater.from(this).inflate(R.layout.holiday_list, null);
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.holidays_recy);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         HolidayAdapter holidayAdapter = new HolidayAdapter();
         recyclerView.setAdapter(holidayAdapter);
         final BottomSheetDialog dialog = new BottomSheetDialog(this);
