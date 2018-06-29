@@ -64,6 +64,8 @@
         <activity android:name=".module.me.AddressActivity" />
         <activity android:name=".module.me.CalendarActivity" />
         <activity android:name=".module.me.weather.weather.WeatherActivity"></activity>
+
+        <service android:name=".update.DownloadService"/>
     </application>
 
 </manifest>

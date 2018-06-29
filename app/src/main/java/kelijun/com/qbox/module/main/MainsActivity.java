@@ -16,12 +16,16 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import kelijun.com.qbox.R;
 import kelijun.com.qbox.base.BaseCustomActivity;
+import kelijun.com.qbox.config.Const;
 import kelijun.com.qbox.model.entities.RefreshNewsFragmentEvent;
 import kelijun.com.qbox.module.find.FindFragment;
 import kelijun.com.qbox.module.me.MeFragment;
 import kelijun.com.qbox.module.news.NewsFragment;
 import kelijun.com.qbox.module.news_category.CategoryActivity;
 import kelijun.com.qbox.module.wechat.WechatFragment;
+import kelijun.com.qbox.update.AppUtils;
+import kelijun.com.qbox.update.UpdateChecker;
+import kelijun.com.qbox.utils.SPUtils;
 import kelijun.com.qbox.utils.StateBarTranslucentUtils;
 import kelijun.com.qbox.widget.TabBar_Mains;
 
@@ -45,7 +49,7 @@ public class MainsActivity extends BaseCustomActivity {
     public MeFragment mMeFragment;
     public NewsFragment mNewsFragment;
     public WechatFragment mWechatFragment;
-  public FindFragment mFindFragment;
+    public FindFragment mFindFragment;
     private String mCurrentIndex;
     boolean isRestart = false;
 
@@ -55,10 +59,12 @@ public class MainsActivity extends BaseCustomActivity {
         Logger.i("initContentView");
         setContentView(R.layout.activity_mains);
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void OnRefreshNewsFragmentEvent(RefreshNewsFragmentEvent event) {
         startActivityForResult(new Intent(MainsActivity.this, CategoryActivity.class), event.getMark_code());
     }
+
     @OnClick({R.id.recommend_mains, R.id.cityfinder_mains, R.id.findtravel_mains, R.id.me_mains})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -91,7 +97,10 @@ public class MainsActivity extends BaseCustomActivity {
             switchToFragment(startPage);
             mCurrentIndex = startPage;
         }
-
+        int qbox_version = (int) SPUtils.get(this, Const.QBOX_NEW_VERSION, 0);
+        if (qbox_version != 0 && qbox_version > AppUtils.getVersionCode(this)) {
+            UpdateChecker.checkForNotification(this); //通知提示升级
+        }
         //订阅事件
         EventBus.getDefault().register(this);
     }
@@ -104,21 +113,19 @@ public class MainsActivity extends BaseCustomActivity {
     }
 
     private void initByRestart(Bundle savedInstanceState) {
-
         mCurrentIndex = savedInstanceState.getString("mCurrentIndex");
-
         isRestart = true;
         Logger.e("恢复状态：" + mCurrentIndex);
         mMeFragment = (MeFragment) sBaseFragmentManager.findFragmentByTag(ME_FRAGMENT);
         mNewsFragment = (NewsFragment) sBaseFragmentManager.findFragmentByTag(NEWS_FRAGMENT);
-      mWechatFragment = (WechatFragment) sBaseFragmentManager.findFragmentByTag(WECHAT_FRAGMENT);
-      mFindFragment = (FindFragment) sBaseFragmentManager.findFragmentByTag(FIND_FRAGMENT);
+        mWechatFragment = (WechatFragment) sBaseFragmentManager.findFragmentByTag(WECHAT_FRAGMENT);
+        mFindFragment = (FindFragment) sBaseFragmentManager.findFragmentByTag(FIND_FRAGMENT);
 
         switchToFragment(mCurrentIndex);
     }
 
     private void switchToFragment(String index) {
-         hideAllFragment();
+        hideAllFragment();
         switch (index) {
             case NEWS_FRAGMENT:
                 if (sRecommendMains.getVisibility() == View.VISIBLE) {
@@ -130,7 +137,7 @@ public class MainsActivity extends BaseCustomActivity {
                 showWechatFragment();
                 break;
             case FIND_FRAGMENT:
-               showFindFragment();
+                showFindFragment();
                 break;
             case ME_FRAGMENT:
                 showMeFragment();
@@ -141,6 +148,7 @@ public class MainsActivity extends BaseCustomActivity {
         }
         mCurrentIndex = index;
     }
+
     private void showFindFragment() {
         if (false == sFindtravelMains.isSelected()) {
             sFindtravelMains.setSelected(true);
@@ -172,6 +180,7 @@ public class MainsActivity extends BaseCustomActivity {
         }
 
     }
+
     private void showNewsFragment() {
         if (false == sRecommendMains.isSelected()) {
             sRecommendMains.setSelected(true);
@@ -212,7 +221,7 @@ public class MainsActivity extends BaseCustomActivity {
         if (mNewsFragment != null) {
             hideFragment(mNewsFragment);
         }
-       if (mWechatFragment != null) {
+        if (mWechatFragment != null) {
             hideFragment(mWechatFragment);
         }
         if (mFindFragment != null) {
