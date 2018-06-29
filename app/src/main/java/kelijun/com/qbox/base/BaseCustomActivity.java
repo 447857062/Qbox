@@ -23,7 +23,7 @@ import kelijun.com.qbox.widget.custom.CustomConfirmDialog;
  */
 
 public abstract class BaseCustomActivity extends AppCompatActivity implements IBaseView {
-    private FragmentManager mFragmentManager;
+    private FragmentManager fragmentManager;
     private ProgressDialog mProgressDialog;
 
     public abstract void initContentView();
@@ -42,7 +42,17 @@ public abstract class BaseCustomActivity extends AppCompatActivity implements IB
 
         initView(savedInstanceState);
     }
-
+    /**
+     * 获取Fragment管理器
+     *
+     * @return
+     */
+    public FragmentManager getBaseFragmentManager() {
+        if (fragmentManager == null) {
+            fragmentManager = getSupportFragmentManager();
+        }
+        return fragmentManager;
+    }
     public void showRadioButtonDialog(
             String title,
             String message,
@@ -117,10 +127,10 @@ public abstract class BaseCustomActivity extends AppCompatActivity implements IB
 
     //--------------------------Fragment相关--------------------------//
     public FragmentManager getFragmentmanager() {
-        if (mFragmentManager == null) {
-            mFragmentManager = getSupportFragmentManager();
+        if (fragmentManager == null) {
+            fragmentManager = getSupportFragmentManager();
         }
-        return mFragmentManager;
+        return fragmentManager;
     }
 
     public FragmentTransaction getFragmentTransaction() {

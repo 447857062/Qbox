@@ -11,6 +11,7 @@ import org.greenrobot.greendao.database.Database;
 
 import kelijun.com.qbox.greendao.db.DaoMaster;
 import kelijun.com.qbox.greendao.db.DaoSession;
+import kelijun.com.qbox.module.main.MainsActivity;
 
 /**
  * Created by ${kelijun} on 2018/6/26.
@@ -48,6 +49,10 @@ public class BaseApplication extends Application {
         daoSession = new DaoMaster(db).newSession();
         MobSDK.init(this);
 
+    }
+    private static MainsActivity sMainActivity = null;
+    public static void setMainActivity(MainsActivity activity) {
+        sMainActivity = activity;
     }
     /**
      * 初始化当前设备屏幕宽高
