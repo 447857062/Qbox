@@ -1,6 +1,5 @@
 package kelijun.com.qbox.module.me;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -27,6 +26,7 @@ import kelijun.com.qbox.base.BaseFragment;
 import kelijun.com.qbox.config.Const;
 import kelijun.com.qbox.model.entities.RefreshMeFragmentEvent;
 import kelijun.com.qbox.module.me.weather.weather.WeatherActivity;
+import kelijun.com.qbox.module.setting.SettingActivity;
 import kelijun.com.qbox.utils.SPUtils;
 
 /**
@@ -120,16 +120,16 @@ public class MeFragment extends BaseFragment {
                 startActivity(new Intent(getContext(), WeatherActivity.class));
                 break;
             case R.id.led_me:
-                //  startActivity(new Intent(getContext(),LEDActivity.class));
+                startActivity(new Intent(getContext(),LEDActivity.class));
                 break;
             case R.id.sdt_me:
-                //   startActivity(new Intent(getContext(),FlashActivity.class));
+                  startActivity(new Intent(getContext(),FlashActivity.class));
                 break;
             case R.id.erweima_me:
-                //   startActivity(new Intent(getContext(),ZxingActivity.class));
+                  startActivity(new Intent(getContext(),ZxingActivity.class));
                 break;
             case R.id.setting_me:
-                // startActivity(new Intent(getContext(), SettingActivity.class));
+                 startActivity(new Intent(getContext(), SettingActivity.class));
                 break;
             case R.id.fab:
                 Intent intent = new Intent(getContext(), UserInfoActivity.class);
@@ -138,8 +138,7 @@ public class MeFragment extends BaseFragment {
                         mUserheadMe,
                         getString(R.string.transition_userhead)
                 );
-
-                ActivityCompat.startActivity((Activity) getContext(), intent, optionsCompat.toBundle());
+                ActivityCompat.startActivity(getContext(), intent, optionsCompat.toBundle());
                 break;
         }
     }

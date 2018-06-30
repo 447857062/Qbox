@@ -63,9 +63,19 @@
         <activity android:name=".module.me.UserInfoActivity" />
         <activity android:name=".module.me.AddressActivity" />
         <activity android:name=".module.me.CalendarActivity" />
-        <activity android:name=".module.me.weather.weather.WeatherActivity"></activity>
+        <activity android:name=".module.me.weather.weather.WeatherActivity" />
 
-        <service android:name=".update.DownloadService"/>
+        <service android:name=".update.DownloadService" />
+
+        <activity android:name=".module.me.LEDActivity" />
+        <activity android:name=".module.me.FlashActivity" />
+        <activity android:name=".module.me.ZxingActivity" />
+        <activity android:name=".module.setting.SettingActivity" />
+        <activity android:name=".module.setting.AccountActivity" />
+        <activity android:name=".module.setting.WebPageActivity" />
+        <activity android:name=".module.setting.StatementActivity" />
+        <activity android:name=".module.setting.AboutMeActivity" />
+        <activity android:name=".module.setting.WeatherAddressActivity"></activity>
     </application>
 
 </manifest>
