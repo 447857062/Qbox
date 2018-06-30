@@ -5,7 +5,7 @@
              android:orientation="vertical"
              android:stateListAnimator="@animator/raise">
 
-    <com.ocnyang.qbox.app.widget.FourThreeImageView
+    <kelijun.com.qbox.widget.FourThreeImageView
         android:id="@+id/img_areaset_item"
         android:layout_width="match_parent"
         android:layout_height="300dp"

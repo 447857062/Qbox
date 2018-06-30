@@ -3,21 +3,9 @@ manifest
 ADDED from C:\Users\Administrator\Desktop\QBox-master\QBox\magicindicator\src\main\AndroidManifest.xml:1:1-58
 INJECTED from C:\Users\Administrator\Desktop\QBox-master\QBox\magicindicator\src\main\AndroidManifest.xml:1:1-58
 INJECTED from C:\Users\Administrator\Desktop\QBox-master\QBox\magicindicator\src\main\AndroidManifest.xml:1:1-58
-INJECTED from C:\Users\Administrator\Desktop\QBox-master\QBox\magicindicator\src\main\AndroidManifest.xml:1:1-58
-INJECTED from C:\Users\Administrator\Desktop\QBox-master\QBox\magicindicator\src\main\AndroidManifest.xml:1:1-58
-INJECTED from C:\Users\Administrator\Desktop\QBox-master\QBox\magicindicator\src\main\AndroidManifest.xml:1:1-58
-INJECTED from C:\Users\Administrator\Desktop\QBox-master\QBox\magicindicator\src\main\AndroidManifest.xml:1:1-58
 	package
 		ADDED from C:\Users\Administrator\Desktop\QBox-master\QBox\magicindicator\src\main\AndroidManifest.xml:1:11-55
 		INJECTED from C:\Users\Administrator\Desktop\QBox-master\QBox\magicindicator\src\main\AndroidManifest.xml
-		INJECTED from C:\Users\Administrator\Desktop\QBox-master\QBox\magicindicator\src\main\AndroidManifest.xml
-	android:versionName
-		INJECTED from C:\Users\Administrator\Desktop\QBox-master\QBox\magicindicator\src\main\AndroidManifest.xml
-		ADDED from C:\Users\Administrator\Desktop\QBox-master\QBox\magicindicator\src\main\AndroidManifest.xml:1:1-58
-		INJECTED from C:\Users\Administrator\Desktop\QBox-master\QBox\magicindicator\src\main\AndroidManifest.xml
-	android:versionCode
-		INJECTED from C:\Users\Administrator\Desktop\QBox-master\QBox\magicindicator\src\main\AndroidManifest.xml
-		ADDED from C:\Users\Administrator\Desktop\QBox-master\QBox\magicindicator\src\main\AndroidManifest.xml:1:1-58
 		INJECTED from C:\Users\Administrator\Desktop\QBox-master\QBox\magicindicator\src\main\AndroidManifest.xml
 uses-sdk
 INJECTED from C:\Users\Administrator\Desktop\QBox-master\QBox\magicindicator\src\main\AndroidManifest.xml reason: use-sdk injection requested

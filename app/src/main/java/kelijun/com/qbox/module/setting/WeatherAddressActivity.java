@@ -142,7 +142,6 @@ public class WeatherAddressActivity extends BaseCommonActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN) //在ui线程执行
     public void onEventCome(City.HeWeather5Bean.BasicBean BasicBean) {
-
         List<ApiManager.Area> areas = new ArrayList<>();
         String s = (String) SPUtils.get(this, ApiManager. KEY_SELECTED_AREA, "");
         if (!TextUtils.isEmpty(s)) {
@@ -151,7 +150,6 @@ public class WeatherAddressActivity extends BaseCommonActivity {
                 Collections.addAll(areas, aa);
             }
         }
-
         boolean flag = false;
         for (ApiManager.Area area : areas) {
             if (BasicBean.getId().equals(area.getId())) {
@@ -159,9 +157,7 @@ public class WeatherAddressActivity extends BaseCommonActivity {
                 break;
             }
         }
-
         ApiManager.Area e = new ApiManager.Area();
-
         if (!flag) {
             e.setCity(BasicBean.getCity());
             e.setProvince(BasicBean.getProv());
@@ -169,7 +165,6 @@ public class WeatherAddressActivity extends BaseCommonActivity {
             e.setName_cn(BasicBean.getCity());
             areas.add(e);
         }
-
         SPUtils.put(this,ApiManager. KEY_SELECTED_AREA, new Gson().toJson(areas));
         initRecy();
     }

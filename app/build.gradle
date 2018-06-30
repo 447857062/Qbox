@@ -68,7 +68,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:cardview-v7:25.3.1'
@@ -93,13 +92,16 @@ dependencies {
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-    compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'de.hdodenhof:circleimageview:2.2.0'
     compile project(':magicindicator')
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.8.0'
-    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.android.support:multidex:1.0.2'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.google.android:flexbox:0.2.6'
     compile 'com.robertlevonyan.view:MaterialChipView:1.0.1'
     compile 'com.jph.takephoto:takephoto_library:4.0.3'
     compile 'com.prolificinteractive:material-calendarview:1.4.3'
+    compile 'cn.bingoogolapple:bga-qrcodecore:1.1.7@aar'
+    compile 'cn.bingoogolapple:bga-zxing:1.1.7@aar'
+    compile 'com.google.zxing:core:3.2.1'
 }
