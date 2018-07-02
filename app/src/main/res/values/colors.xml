@@ -4,7 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="divider">#BDBDBD</color>
-    <color name="colorPrimaryText">#212121</color>
     <color name="secondary_text">#757575</color>
     <color name="tip">#999c9c9c</color>
     <color name="bg_text_wechat_item">#88000000</color>
@@ -13,4 +12,6 @@
     <color name="colorPrimaryLight">#C5CAE9</color>
     <color name="white_ccffffff">#77ffffff</color>
     <color name="background_color">#FFFAFAFA</color>
+    <color name="colorPrimaryText">#212121</color>
+    <color name="black_overlay">#66000000</color>
 </resources>

@@ -8,6 +8,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PersistableBundle;
+import android.os.Vibrator;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -28,8 +31,11 @@ import com.jph.takephoto.permission.InvokeListener;
 import com.jph.takephoto.permission.PermissionManager;
 import com.jph.takephoto.permission.TakePhotoInvocationHandler;
 
+import java.io.File;
+
 import butterknife.BindView;
 import cn.bingoogolapple.qrcode.core.QRCodeView;
+import cn.bingoogolapple.qrcode.zxing.QRCodeDecoder;
 import cn.bingoogolapple.qrcode.zxing.ZXingView;
 import kelijun.com.qbox.Html5Activity;
 import kelijun.com.qbox.R;
@@ -146,6 +152,47 @@ public class ZxingStartActivity extends BaseCommonActivity implements QRCodeView
         mDialogBuilder.show();
 
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mZxingview.startCamera();
+        mZxingview.showScanRect();
+    }
+
+    @Override
+    protected void onStop() {
+        mZxingview.stopCamera();
+        super.onStop();
+    }
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        getTakePhoto().onSaveInstanceState(outState);
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        getTakePhoto().onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+        getTakePhoto().onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState, persistentState);
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        //以下代码为处理Android6.0、7.0动态权限所需
+        PermissionManager.TPermissionType type = PermissionManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionManager.handlePermissionsResult(this, type, invokeParam, this);
+    }
+    @Override
+    protected void onDestroy() {
+        mZxingview.onDestroy();
+        super.onDestroy();
+    }
+
     private void actionAll(String result, RadioGroup radioGroup) {
 
         switch(radioGroup.getCheckedRadioButtonId()){
@@ -337,9 +384,16 @@ public class ZxingStartActivity extends BaseCommonActivity implements QRCodeView
 
     @Override
     public void onScanQRCodeSuccess(String result) {
-
+        showSuccessDialog(result);
+        vibrate();
     }
-
+    /**
+     * 震动手机
+     */
+    private void vibrate() {
+        Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        vibrator.vibrate(200);
+    }
     @Override
     public void onScanQRCodeOpenCameraError() {
 
@@ -347,7 +401,17 @@ public class ZxingStartActivity extends BaseCommonActivity implements QRCodeView
 
     @Override
     public void takeSuccess(TResult result) {
+        File file = new File(result.getImages().get(0).getCompressPath());
+        String path = file.getAbsolutePath();
 
+        //获取扫描图片结果的过程必须在异步线程中进行
+        //在这里，因为获取图片的过程 是在异步线程中进行的，所以上面不必在开启新的异步线程了。
+        String spotResult = QRCodeDecoder.syncDecodeQRCode(path);
+        //需要返回到UI线程 刷新头像
+        Message msg = handler.obtainMessage();
+        msg.what = mMessageFlag;
+        msg.obj = spotResult;
+        handler.sendMessage(msg);
     }
 
     @Override

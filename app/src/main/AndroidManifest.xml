@@ -76,7 +76,10 @@
         <activity android:name=".module.setting.StatementActivity" />
         <activity android:name=".module.setting.AboutMeActivity" />
         <activity android:name=".module.setting.WeatherAddressActivity" />
-        <activity android:name=".module.me.ZxingStartActivity"></activity>
+        <activity android:name=".module.me.ZxingStartActivity" />
+        <activity android:name=".module.me.LEDSingleActivity" />
+        <activity android:name=".module.me.LEDAutoActivity" />
+        <activity android:name=".module.me.LEDMagicActivity"></activity>
     </application>
 
 </manifest>
